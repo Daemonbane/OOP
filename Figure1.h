@@ -13,8 +13,4 @@ bool operator > (Figure &a, Figure& b) {
     return a.square() > b.square();
 }
 
-bool operator < (Figure &a, Figure& b) {
-    return a.square() < b.square();
-}
-
 #endif

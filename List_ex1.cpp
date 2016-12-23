@@ -1,6 +1,7 @@
 #include <iostream>
 #include <memory>
 #include "List_ex1.h"
+#include <exception> 
 
 using std::endl;
 using std::cout;
@@ -34,6 +35,21 @@ template <class T>	int List_ex<T> ::size() {
 		head = tmp;
 	}
 
+    template<class T> void List_ex<T>::remove(TIterator<T> ptr) {
+        if(head == ptr.ptr) {
+            head = head->next;
+            return;
+        }
+		shared_ptr <node<T>> tmp = head;
+		while (tmp->next != nullptr) { 
+            if(tmp->next == ptr.ptr) {
+                tmp->next = tmp->next->next;
+                return;
+            }
+            tmp = tmp->next; 
+        }
+    }
+
 template <class T>	void List_ex<T>:: push_back(shared_ptr <T> ptr) {
 		//add pointer on figure to the back of the list
 		shared_ptr <node<T>> tmp = head;
@@ -65,11 +81,11 @@ template <class T>	void List_ex<T>:: push_back(shared_ptr <T> ptr) {
 		if (tmp == nullptr)
 			throw "access exception";
 		if (tmp->next == nullptr)
-			tmp = nullptr; else { 
+			tmp = nullptr;
 		while(tmp->next->next != nullptr) {
 			tmp = tmp->next;
 		}
-		tmp->next = nullptr; }
+		tmp->next = nullptr;
 	}
 
 	template <class T> void List_ex<T>::print() {
@@ -89,72 +105,7 @@ template <class T>	void List_ex<T>:: push_back(shared_ptr <T> ptr) {
 
 	}
 		
-template<class T > future<void> List_ex<T>::sort_in_background() {
-        std::packaged_task<void(void) > task(std::bind(std::mem_fn(&List_ex<T>::sort_parallel), this));
-        std::future<void> res(task.get_future());
-        std::thread th(std::move(task));
-        th.detach();
-        return res;
-}
-
-
-template<class T> void List_ex<T>::sort() {
-    if (size() > 1) {
-        std::shared_ptr<T> middle = get_first();
-        List_ex<T> left, right;
-        pop_first();
-        for(auto item: *this) {
-            if (*item < *middle) {
-                left.push_front(item);
-            } else {
-                right.push_front(item);
-            }
-        }
-
-        left.sort();
-        right.sort();
-        head = nullptr;
-        while (left.head) {
-            push_back(left.get_first());
-            left.pop_first();
-        }
-        push_back(middle);
-        while (right.head) {
-            push_back(right.get_first());
-            right.pop_first();
-        }
-    }
-}
-template<class T> void List_ex<T>::sort_parallel() {
-    if (size() > 1) {
-        std::shared_ptr<T> middle = get_first();
-        List_ex<T> left, right;
-        pop_first();
-        for(auto item: *this) {
-            if (*item < *middle) {
-                left.push_front(item);
-            } else {
-                right.push_front(item);
-            }
-        }
-
-        std::future<void> left_res = left.sort_in_background();
-        std::future<void> right_res = right.sort_in_background();
-        head = nullptr;
-        left_res.get();
-        while (left.head) {
-            push_back(left.get_first());
-            left.pop_first();
-        }
-        push_back(middle);
-        right_res.get();
-        while (right.head) {
-            push_back(right.get_first());
-            right.pop_first();
-        }
-    }
-}
-
+	
 
 template <class T>	shared_ptr <T> List_ex<T>:: get_first() {
 		//access front element

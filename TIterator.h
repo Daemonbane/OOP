@@ -6,11 +6,9 @@
 using std::shared_ptr;
 
 template <class T>
-class TIterator {
-	private:
-	shared_ptr <node<T>> ptr;
+struct TIterator {
 
-public:
+	shared_ptr <node<T>> ptr;
 
 	TIterator (shared_ptr <node<T>> t) {
 		ptr = t;

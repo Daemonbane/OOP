@@ -3,9 +3,8 @@
 #include "TIterator.h" 
 #include <iostream>
 #include <memory>
-#include <future>
+#include <mutex>
 
-using std::future;
 using std::endl;
 using std::cout;
 using std::cin;
@@ -14,6 +13,7 @@ using std::swap;
 using std::ostream;
 template <class T> class List_ex {
 	shared_ptr<node<T>> head;
+	 std::recursive_mutex   *list_mutex; 
 public:
 	List_ex();
 
@@ -28,15 +28,11 @@ public:
 	void pop_last();
 	TIterator<T> begin();
 	TIterator<T> end() ;
-
+    void remove(TIterator<T>);
 	void print();
 	void print_standart();
 	shared_ptr <T>get_first();
     shared_ptr <T>get_last();
-
-    void sort();
-    void sort_parallel();
-    future<void> sort_in_background();
 
 	~List_ex(){
 	}
