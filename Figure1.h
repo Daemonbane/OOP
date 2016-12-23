@@ -8,4 +8,9 @@ public:
 	virtual void  print (std::ostream& os = cout) = 0;
 	virtual ~Figure() {};
 };
+
+bool operator > (Figure &a, Figure& b) {
+    return a.square() > b.square();
+}
+
 #endif
