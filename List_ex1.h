@@ -3,7 +3,9 @@
 #include "TIterator.h" 
 #include <iostream>
 #include <memory>
+#include <future>
 
+using std::future;
 using std::endl;
 using std::cout;
 using std::cin;
@@ -17,9 +19,9 @@ public:
 
 	int size();
 
-	void push_front(shared_ptr <T> &ptr);
+	void push_front(shared_ptr <T> ptr);
 
-	void push_back(shared_ptr <T> &ptr);
+	void push_back(shared_ptr <T> ptr);
 
 	void pop_first();
 
@@ -31,6 +33,10 @@ public:
 	void print_standart();
 	shared_ptr <T>get_first();
     shared_ptr <T>get_last();
+
+    void sort();
+    void sort_parallel();
+    future<void> sort_in_background();
 
 	~List_ex(){
 	}
